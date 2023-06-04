@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
   const [buttonHamburger, setButtonHamburger] = useState(true);
   const [navbarStyle, setNavbarStyle] = useState('bg-gray-800');
   const [isScrolled, setIsScrolled] = useState(false);
   const [logo, setLogo] = useState('logo.png.png');
+  const location = useLocation();
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const changeNavbarStyleOnScroll = () => {
@@ -38,18 +40,25 @@ export default function Navbar() {
 
   function handleButton() {
     setButtonHamburger(!buttonHamburger);
-    handleMenu();
   }
 
-  function handleMenu() {
-    const mobileMenu = document.getElementById('mobile-menu');
+  function handleMenuClick() {
+    setButtonHamburger(true);
+  }
 
-    if (buttonHamburger) {
-      mobileMenu.classList.remove('hidden');
-    } else {
-      mobileMenu.classList.add('hidden');
+  function handleClickOutside(event) {
+    if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      setButtonHamburger(true);
     }
   }
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav
@@ -104,18 +113,18 @@ export default function Navbar() {
                 <Link
                   to="/"
                   className={`text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
-                    window.location.pathname === '/' ? 'bg-gray-900 text-white' : ''
+                    location.pathname === '/' ? 'bg-gray-900 text-white' : ''
                   }`}
-                  aria-current={window.location.pathname === '/' ? 'page' : undefined}
+                  aria-current={location.pathname === '/' ? 'page' : undefined}
                 >
                   Home
                 </Link>
                 <Link
                   to="/gallery"
                   className={`text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
-                    window.location.pathname === '/gallery' ? 'bg-gray-900 text-white' : ''
+                    location.pathname === '/gallery' ? 'bg-gray-900 text-white' : ''
                   }`}
-                  aria-current={window.location.pathname === '/gallery' ? 'page' : undefined}
+                  aria-current={location.pathname === '/gallery' ? 'page' : undefined}
                 >
                   Gallery
                 </Link>
@@ -130,23 +139,25 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="hidden sm:hidden" id="mobile-menu">
+      <div className={`sm:hidden ${buttonHamburger ? 'hidden' : ''}`} id="mobile-menu" ref={mobileMenuRef}>
         <div className="space-y-1 px-2 pb-3 pt-2">
           <Link
             to="/"
             className={`bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium${
-              window.location.pathname === '/' ? 'bg-gray-900 text-white' : ''
+              location.pathname === '/' ? 'bg-gray-900 text-white' : ''
             }`}
-            aria-current={window.location.pathname === '/' ? 'page' : undefined}
+            aria-current={location.pathname === '/' ? 'page' : undefined}
+            onClick={handleMenuClick}
           >
             Home
           </Link>
           <Link
             to="/gallery"
             className={`text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium${
-              window.location.pathname === '/gallery' ? 'bg-gray-900 text-white' : ''
+              location.pathname === '/gallery' ? 'bg-gray-900 text-white' : ''
             }`}
-            aria-current={window.location.pathname === '/gallery' ? 'page' : undefined}
+            aria-current={location.pathname === '/gallery' ? 'page' : undefined}
+            onClick={handleMenuClick}
           >
             Gallery
           </Link>
