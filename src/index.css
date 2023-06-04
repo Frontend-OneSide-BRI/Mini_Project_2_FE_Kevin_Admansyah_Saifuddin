@@ -228,3 +228,45 @@ code {
   }
 }
 
+
+.custombutton {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 8px;
+  z-index: 1;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.custombutton:hover {
+  box-shadow: 0 0 10px 3px rgba(41, 126, 255, 0.8);
+}
+
+.custombutton:hover::before {
+  transform: scaleX(1);
+}
+
+@keyframes glow-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(41, 126, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(41, 126, 255, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 0px rgba(41, 126, 255, 0.5);
+  }
+}
+
+.glow-blue:hover {
+  animation: glow-animation 1s infinite;
+}
+

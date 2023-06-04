@@ -13,7 +13,9 @@ export default function Parallax({ title, button }) {
       <div className="container relative z-10 py-28">
         <div className="mx-auto max-w-lg">
           <h2 className="text-4xl mb-4">{title}</h2>
-          {button && <button className="custom-button">{button}</button>}
+          {button && (
+  <button className="custombutton hover:glow-blue">{button}</button>
+)}
         </div>
       </div>
     </section>
